@@ -60,5 +60,18 @@ pipeline {
                 }
             }
         }
+
+        stage('DEPLOYMENT')
+        {
+            agent
+            {
+                label 'ubuntu-Appserver-1'
+            }
+            steps
+            {
+                sh "docker-compose down"
+                sh "docker-compose up -d"
+            }
+        }
     }
 }
