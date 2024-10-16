@@ -36,7 +36,7 @@ pipeline {
             {
                 script
                 {
-                    def app = docker.build("eapen303/Snake_game1")
+                    def app = docker.build("eapen303/snake_game1")
                     app.tag('latest')
                 }
             }
@@ -54,7 +54,7 @@ pipeline {
                 {
                     docker.withRegistry('https://registry.hub.docker.com', 'docker_prop')
                     {
-                        def app = docker.image("eapen303/Snake_game1")
+                        def app = docker.image("eapen303/snake_game1")
                         app.push('latest')
                     }
                 }
