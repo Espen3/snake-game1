@@ -1,33 +1,64 @@
-node('ubuntu-Appserver-1')
-{
+pipeline {
+    agent none
 
-def app
-stage('Cloning Git')
-{
-    /* Let's make sure we have the repository cloned to our workspace */
-    checkout scm
-}
+    stages{
+        stage('CLONE GIT REPOSITORY')
+        {
+            agent
+            {
+                label 'ubuntu-Appserver-1'
+            }
+            steps
+            {
+                checkout scm
+            }
+        }
+        
+        stage('SCA-SAST-SNYK-TEST')
+        {
+            agent
+            {
+                label 'ubuntu-Appserver-1'
+            }
+            steps
+            {
+                echo "SNYK-TEST"
+            }
+        }
 
-stage('Build-and-Tag')
-{
-    /* This builds the actual image; 
-         * This is synonymous to docker build on the command line */
-    app = docker.build('eapen/snake_game_repo')
-}
+        stage('BUILD-AND-TAG')
+        {
+            agent
+            {
+                label 'ubuntu-Appserver-1'
+            }
+            steps
+            {
+                script
+                {
+                    def app = docker.build("eapen303/Snake_game1")
+                    app.tag('latest')
+                }
+            }
+        }
 
-stage('Post-to-dockerhub')
-{
-    docker.withRegistry('https://registry.hub.docker.com', 'docker_prop')
-    {
-        app.push('latest')
+        stage('PUSH-TO-DOCKERHUB')
+        {
+            agent
+            {
+                label 'ubuntu-Appserver-1'
+            }
+            steps
+            {
+                script
+                {
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker_prop')
+                    {
+                        def app = docker.image("eapen303/Snake_game1")
+                        app.push('latest')
+                    }
+                }
+            }
+        }
     }
-   
-}
-
-stage('Deploy')
-{
-    sh "docker-compose down"
-    sh "docker-compose up -d"
-}
-
 }
