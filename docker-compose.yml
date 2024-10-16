@@ -1,7 +1,7 @@
 version: '2.4'
 services:
   snake:
-    image: 'eapen303/snake_game_repo'
+    image: 'eapen303/Snake_game1'
     environment:
      - "PORT:3000"
     ports:
