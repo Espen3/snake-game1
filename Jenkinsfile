@@ -20,10 +20,11 @@ pipeline {
             {
                 label 'ubuntu-Appserver-1'
             }
-            steps
-            {
-                echo "SNYK-TEST"
-            }
+            snykSecurity(
+                snykInstallation: 'Snyk',
+                snykTokenID: 'snyk_token',
+                severity: 'critical'
+            )
         }
 
         stage('BUILD-AND-TAG')
