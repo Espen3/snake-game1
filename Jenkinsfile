@@ -14,6 +14,22 @@ pipeline {
             }
         }
 
+        stage('SCA-SAST-SNYK-TEST') 
+        {
+           agent 
+           {
+             label 'ubuntu-Appserver-3120'
+           }
+           steps
+            {
+                 snykSecurity(
+                    snykInstallation: 'Snyk',
+                    snykTokenId: 'Synkid',
+                    severity: 'critical'
+                 )
+            }
+        }
+
         stage('BUILD-AND-TAG')
         {
             agent
