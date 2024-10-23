@@ -13,22 +13,6 @@ pipeline {
                 checkout scm
             }
         }
-        
-        stage('SCA-SAST-SNYK-TEST')
-        {
-            agent
-            {
-                label 'ubuntu-Appserver-1'
-            }
-            steps
-            {
-                snykSecurity(
-                    snykInstallation: 'Snyk',
-                    snykTokenId: 'snyk_token',
-                    severity: 'critical'
-                )
-            }
-        }
 
         stage('BUILD-AND-TAG')
         {
